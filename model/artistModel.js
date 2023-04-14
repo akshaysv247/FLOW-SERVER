@@ -37,18 +37,6 @@ const ArtistSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  // languages: {
-  //   type: [String],
-  //   default: [],
-  // },
-  // followers: {
-  //   type: Array,
-  //   default: [],
-  // },
-  // playlists: {
-  //   type: [String],
-  //   default: [],
-  // },
 }, {
   timestamps: true,
 });
