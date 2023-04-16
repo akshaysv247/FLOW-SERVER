@@ -19,7 +19,7 @@ const { getAllCategories } = require('../controllers/category');
 router.post('/signup', artistSignup);
 router.post('/login', artistLogin);
 
-router.post('/addtrack/:id', addSongAsArtist);
+router.post('/add-track/:id', addSongAsArtist);
 router.get('/get-all-tracks/:id', authentication, getAllSongsOfAnArtist);
 
 router.get('/get-profile/:id', authentication, getArtistProfile);

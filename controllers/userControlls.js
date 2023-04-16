@@ -3,9 +3,7 @@
 const { UserModel } = require('../model/userModel');
 
 exports.likeSongs = async (req, res) => {
-  console.log('ethiii');
   const { userId, trackId } = req.params;
-  console.log(trackId, userId);
   try {
     const user = await UserModel.findOne({ _id: userId });
     const index = user.likedSongs.indexOf(trackId);
@@ -28,6 +26,7 @@ exports.getLikedSongs = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await UserModel.findById(id).populate('likedSongs');
+    console.log(user, 'use');
     const songs = user.likedSongs;
     if (songs.length > 0) {
       return res.json({ success: true, songs });

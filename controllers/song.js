@@ -35,23 +35,28 @@ exports.addSong = async (req, res) => {
 exports.addSongAsArtist = async (req, res) => {
   const { id } = req.params;
   try {
+    console.log(req.body, 'body');
     const artist = await ArtistModel.findOne({ _id: id });
-    if (artist.isVerified === true) {
+    const category = await Category.findOne({ name: req.body.selectedCat });
+    console.log(category, artist, 'thinkgs');
+    if (artist.isVerified) {
       const newSong = song({
-        name: req.body.data.songName,
+        name: req.body.datas.songName,
         songURL: req.body.audio,
         artist: req.body.name,
-        category: req.body.value,
+        artistId: artist._id,
+        category: category._id,
         imgURL: req.body.img,
-        language: req.body.data.language,
+        language: req.body.language,
+        album: req.body.datas.albumName,
       });
       const savedSong = await newSong.save();
-      console.log(savedSong);
+      console.log(savedSong, 'saved');
       artist.songs.push(savedSong._id);
       await artist.save();
       return res.json({ message: 'Song Added Successfully', success: true });
     } else {
-      return res.json({ message: 'You are not verified ...!', success: false });
+      return res.json({ message: 'You are not verified as an artist...!', success: false });
     }
   } catch (error) {
     return res.status(404).send({ message: error.message, success: false });
