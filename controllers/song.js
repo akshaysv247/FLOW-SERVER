@@ -94,12 +94,13 @@ exports.getAllSongsOfAnArtist = async (req, res) => {
 };
 
 exports.getCommonSongs = async (req, res) => {
-  const { track } = req.body;
+  const { id, songId } = req.params;
   try {
-    const songs = await song.find({ category: track.category });
-    console.log(songs);
+    const songs = await song.find({ _id: { $ne: songId }, category: id });
     if (songs) {
       return res.json({ songs, success: true });
+    } else {
+      return res.json({ message: 'Failed to find the next song for you', success: false });
     }
   } catch (error) {
     return res.status(404).send({ message: error.message });

@@ -8,7 +8,9 @@ const {
 const {
   getAllArtists,
 } = require('../controllers/artistControls');
-const { getAllSongs, getAllFeeds, search } = require('../controllers/song');
+const {
+  getAllSongs, getAllFeeds, search, getCommonSongs,
+} = require('../controllers/song');
 const {
   likeSongs, getLikedSongs, checkLiked, uploadProfilePic, updateProfile, getProfile,
 } = require('../controllers/userControlls');
@@ -28,6 +30,9 @@ router.put('/update-profile/:id', authentication, updateProfile);
 
 router.get('/get-all-tracks', authentication, getAllSongs);
 router.get('/get-all-artist', authentication, getAllArtists);
+
+router.get('/get-common-songs/:id/:songId', authentication, getCommonSongs);
+
 router.get('/feeds', authentication, getAllFeeds);
 router.post('/search', authentication, search);
 
