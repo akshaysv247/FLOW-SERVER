@@ -131,10 +131,12 @@ exports.search = async (req, res) => {
     } else if (role === 'Artist') {
       console.log('ethii');
       const artists = await ArtistModel.find({ name: { $regex: track, $options: 'i' } });
+      console.log(artists);
       res.json({ success: true, artists });
     } else {
       console.log('ivdeee');
       const playlists = await playlistsModel.find({ name: { $regex: track, $options: 'i' } });
+      console.log(playlists);
       res.json({ success: true, playlists });
     }
   } catch (error) {
