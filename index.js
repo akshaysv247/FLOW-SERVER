@@ -16,8 +16,8 @@ Database();
 
 app.use(
   cors({
-    origin: ['https://bespoke-lolly-c2ab39.netlify.app'],
-    // origin: ['http://localhost:5173'],
+    // origin: ['https://bespoke-lolly-c2ab39.netlify.app'],
+    origin: ['http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }),
