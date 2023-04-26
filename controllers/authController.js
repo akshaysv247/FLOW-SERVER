@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const { UserModel } = require('../model/userModel');
-const { artistModel } = require('../model/artistModel');
+const artistModel = require('../model/artistModel');
 
 module.exports = {
   // Sign up User
@@ -140,33 +140,36 @@ module.exports = {
     }
   },
   resetPassword: async (req, res) => {
-    // console.log(req.body.data, req.body.role);
-    const { password } = req.body.data;
+    const { password } = req.body.datas;
     const { role, email } = req.body;
-    const salt = await bcrypt.genSaltSync(10);
-    const hashedPassword = await bcrypt.hash(password.trim(), salt);
-    if (role === 'fan') {
-      console.log(password, role, email);
-      const user = await UserModel.findOne({ email: email });
-      if (user) {
-        await UserModel.findOneAndUpdate({ email: email }, {
+    try {
+      const salt = await bcrypt.genSaltSync(10);
+      const hashedPassword = await bcrypt.hash(password.trim(), salt);
+      if (role === 'fan') {
+        console.log(password, role, email);
+        const user = await UserModel.findOneAndUpdate({ email: email }, {
           $set: { password: hashedPassword },
         });
-        return res.json({ message: 'Your password has been updated', success: true });
+        if (user) {
+          console.log('resetted', user);
+          return res.json({ message: 'Your password has been updated', success: true });
+        } else {
+          return res.json({ message: 'Invalid User', success: false });
+        }
       } else {
-        return res.json({ message: 'Invalid User', success: false });
-      }
-    } else {
-      console.log('diff role');
-      const artist = await artistModel.findOne({ email: email });
-      if (artist) {
-        await artistModel.findOneAndUpdate({ email: email }, {
+        console.log('diff role');
+        const artist = await artistModel.findOneAndUpdate({ email: email }, {
           $set: { password: hashedPassword },
         });
-        return res.json({ message: 'Your password has been updated', success: true });
-      } else {
-        return res.json({ message: 'Invalid artist', success: false });
+        console.log(artist, 'reset');
+        if (artist) {
+          return res.json({ message: 'Your password has been updated', success: true });
+        } else {
+          return res.json({ message: 'Invalid artist', success: false });
+        }
       }
+    } catch (error) {
+      return res.status(404).send({ message: error.message });
     }
   },
   validateUser: async (req, res) => {

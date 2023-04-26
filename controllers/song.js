@@ -65,7 +65,7 @@ exports.addSongAsArtist = async (req, res) => {
 
 exports.getAllSongs = async (req, res) => {
   try {
-    const data = await song.find();
+    const data = await song.find().sort({ createdAt: -1 });
     if (data) {
       return res.json({ success: true, songs: data });
     } else {
@@ -80,8 +80,8 @@ exports.getAllSongs = async (req, res) => {
 exports.getAllSongsOfAnArtist = async (req, res) => {
   const { id } = req.params;
   try {
-    const Artist = await ArtistModel.findById(id);
-    const data = await song.find({ artist: Artist.name });
+    const Artist = await ArtistModel.findById(id).sort({ createdAt: -1 });
+    const data = await song.find({ artist: Artist.name, IsHide: false });
     if (data) {
       return res.json({ success: true, songs: data });
     } else {
@@ -89,6 +89,21 @@ exports.getAllSongsOfAnArtist = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    return res.status(404).send({ message: error.message });
+  }
+};
+
+exports.getHiddenSongsOfArtist = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const Artist = await ArtistModel.findById(id).sort({ createdAt: -1 });
+    const data = await song.find({ artist: Artist.name, IsHide: true });
+    if (data) {
+      return res.json({ success: true, songs: data });
+    } else {
+      return res.json({ success: false, message: 'Songs not found' });
+    }
+  } catch (error) {
     return res.status(404).send({ message: error.message });
   }
 };
@@ -124,17 +139,14 @@ exports.search = async (req, res) => {
   const { role, track } = req.body;
   try {
     if (role === 'Tracks') {
-      console.log('cvcvc', req.body);
       const tracks = await song.find({ name: { $regex: track, $options: 'i' } });
       res.json({ success: true, tracks });
       console.log(tracks);
     } else if (role === 'Artist') {
-      console.log('ethii');
       const artists = await ArtistModel.find({ name: { $regex: track, $options: 'i' } });
       console.log(artists);
       res.json({ success: true, artists });
     } else {
-      console.log('ivdeee');
       const playlists = await playlistsModel.find({ name: { $regex: track, $options: 'i' } });
       console.log(playlists);
       res.json({ success: true, playlists });

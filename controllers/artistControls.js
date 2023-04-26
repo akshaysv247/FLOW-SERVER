@@ -85,7 +85,7 @@ exports.artistLogin = async (req, res) => {
 };
 exports.getAllArtists = async (req, res) => {
   try {
-    const data = await ArtistModel.find();
+    const data = await ArtistModel.find().sort({ createdAt: -1 });
     if (data) {
       return res.status(200).send({ success: true, artists: data });
     }

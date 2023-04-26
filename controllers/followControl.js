@@ -50,3 +50,16 @@ exports.isfollowing = async (req, res) => {
     return res.status(404).send({ error: error.message });
   }
 };
+
+exports.getFollowers = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const followers = await Follow.find({ follower: id });
+    if (followers) {
+      console.log(followers);
+      return res.json({ followers, success: true });
+    }
+  } catch (error) {
+    return res.status(404).send({ error: error.message });
+  }
+};

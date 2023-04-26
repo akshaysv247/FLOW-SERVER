@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 
 const AdminRoutes = require('./routes/adminRoutes');
-// const uploadRoutes = require('./routes/trackRoutes');
 const ArtistRoutes = require('./routes/artistRoutes');
 const UserRoutes = require('./routes/userRoutes');
 const Database = require('./config/config');
