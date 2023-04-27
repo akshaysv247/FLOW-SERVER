@@ -16,7 +16,7 @@ const {
   getAllFeeds, getAllSongs, getHiddenSongsOfArtist,
 } = require('../controllers/song');
 const { getAllCategories } = require('../controllers/category');
-const { getFollowers } = require('../controllers/followControl');
+const { getFollowers, artistChart } = require('../controllers/followControl');
 
 router.post('/signup', artistSignup);
 router.post('/login', artistLogin);
@@ -25,6 +25,7 @@ router.post('/add-track/:id', addSongAsArtist);
 router.get('/get-all-tracks/:id', authentication, getAllSongsOfAnArtist);
 router.get('/get-hidden-songs-of-artist/:id', authentication, getHiddenSongsOfArtist);
 router.get('/get-followers/:id', authentication, getFollowers);
+router.get('/get-followers-for-chart/:id', authentication, artistChart);
 
 router.get('/get-profile/:id', authentication, getArtistProfile);
 router.post('/upload-picture/:id', authentication, updateArtistProfile);
