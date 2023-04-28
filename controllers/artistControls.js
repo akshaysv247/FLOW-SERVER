@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
 const validator = require('validator');
 const bcrypt = require('bcrypt');
@@ -189,6 +190,19 @@ exports.checkLiked = async (req, res) => {
       return res.json({ success: true });
     } else {
       return res.json({ success: false });
+    }
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
+
+exports.getSpecificArtist = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const artist = await ArtistModel.findOne({ _id: id });
+    console.log(artist, 'df');
+    if (artist) {
+      return res.json({ success: true, artist });
     }
   } catch (error) {
     return res.status(404).send({ message: error.message });

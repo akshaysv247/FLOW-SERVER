@@ -80,8 +80,10 @@ exports.getAllSongs = async (req, res) => {
 exports.getAllSongsOfAnArtist = async (req, res) => {
   const { id } = req.params;
   try {
-    const Artist = await ArtistModel.findById(id).sort({ createdAt: -1 });
-    const data = await song.find({ artist: Artist.name, IsHide: false });
+    const Artist = await ArtistModel.findById(id);
+    // const data = await song.find({ artist: Artist.name, IsHide: false });
+    const data = await song.find({ $and: [{ artist: Artist.name }, { IsHide: false }] });
+    console.log(data);
     if (data) {
       return res.json({ success: true, songs: data });
     } else {
@@ -96,7 +98,7 @@ exports.getAllSongsOfAnArtist = async (req, res) => {
 exports.getHiddenSongsOfArtist = async (req, res) => {
   const { id } = req.params;
   try {
-    const Artist = await ArtistModel.findById(id).sort({ createdAt: -1 });
+    const Artist = await ArtistModel.findById(id);
     const data = await song.find({ artist: Artist.name, IsHide: true });
     if (data) {
       return res.json({ success: true, songs: data });
@@ -156,34 +158,34 @@ exports.search = async (req, res) => {
   }
 };
 
-exports.deleteSongAsAdmin = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const deletedSong = await song.deleteOne({ id });
-    console.log(deletedSong);
-    if (deletedSong) {
-      return res.json({ success: true, message: 'Song is Successfully deleted' });
-    } else {
-      return res.json({ success: false, message: 'Cannot delete this song' });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(404).send({ message: error.message });
-  }
-};
+// exports.deleteSongAsAdmin = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const deletedSong = await song.deleteOne({ id });
+//     console.log(deletedSong);
+//     if (deletedSong) {
+//       return res.json({ success: true, message: 'Song is Successfully deleted' });
+//     } else {
+//       return res.json({ success: false, message: 'Cannot delete this song' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(404).send({ message: error.message });
+//   }
+// };
 
-exports.hideSongAsAdmin = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const hidden = await song.findOneAndUpdate({ _id: id }, { $set: { hidden: true } });
-    if (hidden) {
-      return res.json({ success: true, message: 'Song is Successfully hidden' });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(404).send({ message: error.message });
-  }
-};
+// exports.hideSongAsAdmin = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const hidden = await song.findOneAndUpdate({ _id: id }, { $set: { hidden: true } });
+//     if (hidden) {
+//       return res.json({ success: true, message: 'Song is Successfully hidden' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(404).send({ message: error.message });
+//   }
+// };
 
 exports.deleteSongAsAdmin = async (req, res) => {
   const { id } = req.params;
@@ -215,6 +217,39 @@ exports.hideSongAsAdmin = async (req, res) => {
       return res.json({ success: true, message: 'Song is now hidden' });
     }
   } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
+exports.hideSongAsArtist = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const hideSong = await song.findOne({ _id: id });
+    if (hideSong.IsHide) {
+      hideSong.IsHide = false;
+      await hideSong.save();
+      return res.json({ success: false, message: 'Song is visible' });
+    } else {
+      hideSong.IsHide = true;
+      await hideSong.save();
+      return res.json({ success: true, message: 'Song is now hidden' });
+    }
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
+
+exports.deleteSongAsArtist = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedSong = await song.deleteOne({ _id: id });
+    console.log(deletedSong, 'dele5ted');
+    if (deletedSong) {
+      return res.json({ success: true, message: 'Song is Successfully deleted' });
+    } else {
+      return res.json({ success: false, message: 'Cannot delete this song' });
+    }
+  } catch (error) {
+    console.error(error);
     return res.status(404).send({ message: error.message });
   }
 };

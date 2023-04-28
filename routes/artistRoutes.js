@@ -13,7 +13,8 @@ const {
 } = require('../controllers/playlists');
 const {
   addSongAsArtist, getAllSongsOfAnArtist, getCommonSongs,
-  getAllFeeds, getAllSongs, getHiddenSongsOfArtist,
+  getAllFeeds, getAllSongs, getHiddenSongsOfArtist, hideSongAsArtist, deleteSongAsArtist,
+
 } = require('../controllers/song');
 const { getAllCategories } = require('../controllers/category');
 const { getFollowers, artistChart } = require('../controllers/followControl');
@@ -34,6 +35,8 @@ router.put('/update-profile/:id', authentication, updateProfile);
 router.put('/like-song/:artistId/:trackId', authentication, likeSongs);
 router.get('/get-liked-songs/:id', authentication, getLikedSongs);
 router.get('/check-liked/:id/:songId', authentication, checkLiked);
+router.put('/hide-song/:id', authentication, hideSongAsArtist);
+router.delete('/delete-song/:id', authentication, deleteSongAsArtist);
 
 router.post('/add-new-playlist/:id', authentication, addNewPlaylist);
 router.get('/get-my-playlists/:id', authentication, getMyPlaylists);

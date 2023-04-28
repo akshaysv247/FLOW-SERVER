@@ -12,7 +12,6 @@ exports.addNewPlaylist = async (req, res) => {
       owner: id,
     });
     await playlist.save();
-    console.log(playlist);
     res.json({ success: true, message: 'playlist created successfully', playlist });
   } catch (error) {
     console.error(error.message);
@@ -24,7 +23,6 @@ exports.getMyPlaylists = async (req, res) => {
   const { id } = req.params;
   try {
     const myPlaylists = await Playlist.find({ owner: id });
-    console.log(myPlaylists);
     res.json({ success: true, myPlaylists });
   } catch (error) {
     res.status(404).send({ message: error.message, success: false });
@@ -52,13 +50,54 @@ exports.updateMyPlaylist = async (req, res) => {
 
 exports.getSpecificPlaylist = async (req, res) => {
   const { id } = req.params;
-  console.log(id, 'id');
   try {
     const playlist = await Playlist.findById(id).populate('songs').populate('owner');
-    console.log(playlist, 'playlist');
     res.json({ success: true, playlist });
   } catch (error) {
     console.error(error);
+    return res.status(404).send({ message: error.message });
+  }
+};
+
+exports.removeSongFromPlaylist = async (req, res) => {
+  const { id, songId } = req.params;
+  try {
+    const playlist = await Playlist.findOne({ _id: id });
+    const index = playlist.songs.indexOf(songId);
+    if (playlist.songs.includes(songId)) {
+      playlist.songs.splice(index, 1);
+      await playlist.save();
+    }
+    // console.log(playlist, songId);
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
+
+exports.addSongToPlaylist = async (req, res) => {
+  const { listId, songId } = req.params;
+  try {
+    const playlist = await Playlist.findOne({ _id: listId });
+    if (playlist.songs.includes(songId)) {
+      return res.json({ success: false, message: 'Song already exists in this playlist' });
+    }
+    const list = await Playlist.updateOne({ _id: listId }, { $push: { songs: songId } });
+    console.log(list, 'list');
+    return res.json({ success: true, message: 'Song successfully added' });
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
+
+exports.deleteAPlaylist = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const list = await Playlist.deleteOne({ _id: id });
+    if (list) {
+      return res.json({ success: true, message: 'Deleted Successfully' });
+    }
+    return res.json({ success: false, message: 'An Error occured' });
+  } catch (error) {
     return res.status(404).send({ message: error.message });
   }
 };

@@ -20,6 +20,8 @@ const CopyrightSchema = new mongoose.Schema({
       default: Date.now(),
     },
   }],
+}, {
+  timestamps: true,
 });
 
 const Copyright = mongoose.model('Copyright', CopyrightSchema);
