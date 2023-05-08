@@ -9,11 +9,12 @@ const {
   verifyArtist,
 } = require('../controllers/adminControls');
 const {
-  addSong, getAllSongs, deleteSongAsAdmin, hideSongAsAdmin,
+  addSong, getAllSongs, deleteSongAsAdmin, hideSongAsAdmin, getAllHiddenSongs,
 } = require('../controllers/song');
 const {
   addCategory, getAllCategories, getExactCategoryAsAdmin, editCategory, deleteCategory,
 } = require('../controllers/category');
+const { getReports } = require('../controllers/copyrights');
 
 router.post('/login', adminLogin);
 
@@ -44,5 +45,11 @@ router.get('/get-exact-category/:id', authentication, getExactCategoryAsAdmin);
 router.put('/edit-category/:id', authentication, editCategory);
 
 router.delete('/delete-category/:id', authentication, deleteCategory);
+
+router.get('/get-copyrights', authentication, getReports);
+
+router.get('/get-all-hidden-songs', authentication, getAllHiddenSongs);
+
+router.get('/get-chart-dets', authentication);
 
 module.exports = router;

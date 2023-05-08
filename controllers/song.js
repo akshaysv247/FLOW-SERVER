@@ -65,7 +65,7 @@ exports.addSongAsArtist = async (req, res) => {
 
 exports.getAllSongs = async (req, res) => {
   try {
-    const data = await song.find().sort({ createdAt: -1 });
+    const data = await song.find({ IsHide: false }).sort({ createdAt: -1 });
     if (data) {
       return res.json({ success: true, songs: data });
     } else {
@@ -104,6 +104,18 @@ exports.getHiddenSongsOfArtist = async (req, res) => {
       return res.json({ success: true, songs: data });
     } else {
       return res.json({ success: false, message: 'Songs not found' });
+    }
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
+
+exports.getAllHiddenSongs = async (req, res) => {
+  try {
+    const hidden = await song.find({ IsHide: true });
+    console.log(hidden);
+    if (hidden) {
+      return res.json({ success: true, data: hidden });
     }
   } catch (error) {
     return res.status(404).send({ message: error.message });

@@ -9,7 +9,7 @@ module.exports = {
     try {
       const user = await UserModel.find({ isAdmin: false });
       console.log(user);
-      res.json({ users: user });
+      res.json({ success: true, users: user });
     } catch (error) {
       return res
         .status(200)
@@ -29,12 +29,10 @@ module.exports = {
     }
   },
   getArtistDetails: async (req, res) => {
-    console.log('jersey');
     try {
-      console.log('dfsds');
       const artist = await artistModel.find();
       console.log(artist);
-      res.json({ artists: artist });
+      res.json({ success: true, artists: artist });
     } catch (error) {
       console.log(error);
       return res
