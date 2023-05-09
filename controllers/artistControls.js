@@ -170,6 +170,7 @@ exports.getLikedSongs = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await ArtistModel.findById(id).populate('likedSongs');
+    console.log(user);
     const songs = user.likedSongs;
     if (songs.length > 0) {
       return res.json({ success: true, songs });

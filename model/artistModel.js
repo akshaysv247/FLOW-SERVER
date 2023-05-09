@@ -22,10 +22,10 @@ const ArtistSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
-  likedSongs: {
-    type: [String],
-    default: [],
-  },
+  likedSongs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'song',
+  }],
   ImgUrl: {
     type: String,
   },

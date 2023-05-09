@@ -9,11 +9,11 @@ const {
   updateProfile, checkLiked, getLikedSongs, likeSongs,
 } = require('../controllers/artistControls');
 const {
-  addNewPlaylist, getMyPlaylists, updateMyPlaylist, getSpecificPlaylist,
+  addNewPlaylist, getMyPlaylists, updateMyPlaylist, getSpecificPlaylist, deleteAPlaylist,
 } = require('../controllers/playlists');
 const {
   addSongAsArtist, getAllSongsOfAnArtist, getCommonSongs,
-  getAllFeeds, getAllSongs, getHiddenSongsOfArtist, hideSongAsArtist, deleteSongAsArtist,
+  getAllFeeds, getAllSongs, getHiddenSongsOfArtist, hideSongAsArtist, deleteSongAsArtist, search,
 
 } = require('../controllers/song');
 const { getAllCategories } = require('../controllers/category');
@@ -27,6 +27,7 @@ router.get('/get-all-tracks/:id', authentication, getAllSongsOfAnArtist);
 router.get('/get-hidden-songs-of-artist/:id', authentication, getHiddenSongsOfArtist);
 router.get('/get-followers/:id', authentication, getFollowers);
 router.get('/get-followers-for-chart/:id', authentication, artistChart);
+router.get('/get-all-songs', authentication, getAllSongs);
 
 router.get('/get-profile/:id', authentication, getArtistProfile);
 router.post('/upload-picture/:id', authentication, updateArtistProfile);
@@ -43,9 +44,11 @@ router.get('/get-my-playlists/:id', authentication, getMyPlaylists);
 router.get('/get-songs-for-playlist', authentication, getAllSongs);
 router.put('/update-playlist/:id', authentication, updateMyPlaylist);
 router.get('/get-specific-playlist/:id', authentication, getSpecificPlaylist);
+router.delete('/delete-playlist/:id', authentication, deleteAPlaylist);
 
 router.get('/get-category', authentication, getAllCategories);
 router.get('/get-common-songs', authentication, getCommonSongs);
 router.get('/feeds', authentication, getAllFeeds);
+router.post('/search', authentication, search);
 
 module.exports = router;
