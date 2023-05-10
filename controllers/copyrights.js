@@ -3,13 +3,20 @@ const Copyright = require('../model/copyrights');
 
 exports.getReports = async (req, res) => {
   try {
-    const reports = await Copyright.find().sort({ createdtAt: -1 });
+    const reports = await Copyright.find().populate('song').populate({
+      path: 'complaint',
+      populate: {
+        path: 'createdBy',
+        model: 'UserSchema',
+      },
+    });
+    // console.log(reports[0].complaint);
     if (reports) {
       return res.json({ success: true, reports });
     }
-    console.log(reports);
   } catch (err) {
     console.error(err);
+    return res.status(404).send({ message: err.message });
   }
 };
 
