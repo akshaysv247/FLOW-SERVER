@@ -49,9 +49,8 @@ module.exports = {
           .send({ message: 'All fields must be filled', success: false });
       }
     } catch (error) {
-      res.status(500).send({ message: `userSignup ${error.message}` });
+      return res.status(500).send({ message: `userSignup ${error.message}` });
     }
-    return null;
   },
   // userSign in
   userLogin: async (req, res) => {
@@ -90,11 +89,10 @@ module.exports = {
       }
     } catch (error) {
       // console.log(error);
-      res
+      return res
         .status(500)
         .send({ message: 'Error while Login ', success: false, error });
     }
-    return null;
   },
   // eslint-disable-next-line consistent-return
   adminLogin: async (req, res) => {
@@ -136,7 +134,7 @@ module.exports = {
       }
     } catch (err) {
       console.log(err);
-      res.status(500).send({ message: 'Server error', success: false });
+      return res.status(500).send({ message: 'Server error', success: false });
     }
   },
   resetPassword: async (req, res) => {

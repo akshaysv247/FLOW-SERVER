@@ -15,8 +15,7 @@ Database();
 
 app.use(
   cors({
-    // origin: ['https://bespoke-lolly-c2ab39.netlify.app'],
-    origin: ['https://645ddb923bc76155baab55a7--bespoke-lolly-c2ab39.netlify.app'],
+    origin: ['https://flow.wearwell.cloud/'],
     // origin: ['http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
