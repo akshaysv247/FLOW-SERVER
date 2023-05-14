@@ -8,8 +8,9 @@ module.exports = {
   getUserDetails: async (req, res) => {
     try {
       const user = await UserModel.find({ isAdmin: false });
-      console.log(user);
-      res.json({ success: true, users: user });
+      if (user) {
+        res.json({ success: true, users: user });
+      }
     } catch (error) {
       return res
         .status(200)
@@ -31,8 +32,9 @@ module.exports = {
   getArtistDetails: async (req, res) => {
     try {
       const artist = await artistModel.find();
-      console.log(artist);
-      res.json({ success: true, artists: artist });
+      if (artist) {
+        res.json({ success: true, artists: artist });
+      }
     } catch (error) {
       console.log(error);
       return res

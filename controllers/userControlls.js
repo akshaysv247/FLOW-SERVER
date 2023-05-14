@@ -26,7 +26,6 @@ exports.getLikedSongs = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await UserModel.findById(id).populate('likedSongs');
-    console.log(user, 'use');
     const songs = user.likedSongs;
     if (songs.length > 0) {
       return res.json({ success: true, songs });
@@ -56,7 +55,6 @@ exports.getProfile = async (req, res) => {
   const { id } = req.params;
   try {
     const profile = await UserModel.findOne({ _id: id });
-    console.log(profile);
     if (profile) {
       res.json({ profile, success: true });
     }
@@ -72,7 +70,6 @@ exports.uploadProfilePic = async (req, res) => {
     const user = await UserModel.findOneAndUpdate({ _id: id }, {
       $set: { ImgUrl: uri },
     });
-    console.log(user);
     await user.save();
     if (user) {
       return res.json({ message: 'Updated profile successfully', success: true, user });
@@ -89,7 +86,6 @@ exports.updateProfile = async (req, res) => {
     const user = await UserModel.updateOne({ _id: id }, {
       $set: { name: req.body.name, email: req.body.email },
     });
-    console.log(user);
     await user.save();
     if (user) {
       return res.json({ message: 'Profile updated successfully', success: true, user });

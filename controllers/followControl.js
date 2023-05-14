@@ -29,7 +29,6 @@ exports.unFollowing = async (req, res) => {
       follower: artistId,
       following: id,
     });
-    console.log(unFollowing);
     if (unFollowing) {
       return res.json({ success: true, message: 'Unfollowing Artist successfully' });
     }
@@ -71,8 +70,6 @@ exports.getFollowers = async (req, res) => {
 exports.artistChart = async (req, res) => {
   const currentDate = new Date();
   const fiveWeeksAgo = new Date(currentDate.getTime() - (5 * 7 * 24 * 60 * 60 * 1000));
-
-  console.log(fiveWeeksAgo);
   const { id } = req.params;
   const weekNumber = moment(fiveWeeksAgo).week();
   const data = [{ _id: weekNumber + 1 }, { _id: weekNumber + 2 }, { _id: weekNumber + 3 }, { _id: weekNumber + 4 }, { _id: weekNumber + 5 }];

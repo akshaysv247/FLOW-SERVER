@@ -55,7 +55,6 @@ exports.artistLogin = async (req, res) => {
     if (email && password) {
       const artist = await ArtistModel.findOne({ email });
       if (artist) {
-        // console.log(artist);
         const isMatch = await bcrypt.compare(password, artist.password);
         if (artist.isBlocked) {
           return res
@@ -110,14 +109,12 @@ exports.getArtistProfile = async (req, res) => {
 exports.updateArtistProfile = async (req, res) => {
   const { id } = req.params;
   const { uri } = req.body;
-  console.log(uri, id);
   try {
     const artist = await ArtistModel.findOneAndUpdate({ _id: id }, {
       $set: { ImgUrl: uri },
     });
     await artist.save();
     if (artist) {
-      console.log(artist);
       return res.json({ message: 'Updated profile successful', success: true, artist });
     }
     return res.json({ success: false, message: 'There some issues with your profile updation' });
@@ -128,12 +125,10 @@ exports.updateArtistProfile = async (req, res) => {
 };
 exports.updateProfile = async (req, res) => {
   const { id } = req.params;
-  console.log(id, req.body, 'consu');
   try {
     const user = await ArtistModel.updateOne({ _id: id }, {
       $set: { name: req.body.name, email: req.body.email, ImgUrl: req.body.uploadedUrl },
     });
-    console.log(user);
     await user.save();
     if (user) {
       return res.json({ message: 'Profile updated successfully', success: true, user });
@@ -145,9 +140,7 @@ exports.updateProfile = async (req, res) => {
 };
 
 exports.likeSongs = async (req, res) => {
-  console.log('ethiii');
   const { artistId, trackId } = req.params;
-  console.log(trackId, artistId);
   try {
     const user = await ArtistModel.findOne({ _id: artistId });
     const index = user.likedSongs.indexOf(trackId);
@@ -170,7 +163,6 @@ exports.getLikedSongs = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await ArtistModel.findById(id).populate('likedSongs');
-    console.log(user);
     const songs = user.likedSongs;
     if (songs.length > 0) {
       return res.json({ success: true, songs });
@@ -201,7 +193,6 @@ exports.getSpecificArtist = async (req, res) => {
   const { id } = req.params;
   try {
     const artist = await ArtistModel.findOne({ _id: id });
-    console.log(artist, 'df');
     if (artist) {
       return res.json({ success: true, artist });
     }

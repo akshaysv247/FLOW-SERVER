@@ -61,7 +61,6 @@ module.exports = {
           .send({ message: 'please fill out the fields', success: false });
       }
       const user = await UserModel.findOne({ email: req.body.email });
-      // console.log(user);
       if (!user) {
         return res
           .status(200)
@@ -88,7 +87,6 @@ module.exports = {
           .send({ message: 'Password is incorrect', success: false });
       }
     } catch (error) {
-      // console.log(error);
       return res
         .status(500)
         .send({ message: 'Error while Login ', success: false, error });
@@ -96,22 +94,18 @@ module.exports = {
   },
   // eslint-disable-next-line consistent-return
   adminLogin: async (req, res) => {
-    console.log(req.body);
     try {
       if (req.body) {
         const Admin = await UserModel.findOne({ email: req.body.email });
         const isMatch = await bcrypt.compare(req.body.password, Admin.password);
-        console.log(isMatch);
         if (Admin.isAdmin === true) {
           if (isMatch) {
-            console.log('to');
             const token = jwt.sign(
               // eslint-disable-next-line no-underscore-dangle
               { id: Admin._id },
               process.env.JWT_SECRET,
               { expiresIn: '1d' },
             );
-            console.log('damn');
             res.status(200)
               .send({
                 message: 'Login successful',
@@ -144,22 +138,18 @@ module.exports = {
       const salt = await bcrypt.genSaltSync(10);
       const hashedPassword = await bcrypt.hash(password.trim(), salt);
       if (role === 'fan') {
-        console.log(password, role, email);
         const user = await UserModel.findOneAndUpdate({ email: email }, {
           $set: { password: hashedPassword },
         });
         if (user) {
-          console.log('resetted', user);
           return res.json({ message: 'Your password has been updated', success: true });
         } else {
           return res.json({ message: 'Invalid User', success: false });
         }
       } else {
-        console.log('diff role');
         const artist = await artistModel.findOneAndUpdate({ email: email }, {
           $set: { password: hashedPassword },
         });
-        console.log(artist, 'reset');
         if (artist) {
           return res.json({ message: 'Your password has been updated', success: true });
         } else {
@@ -172,7 +162,6 @@ module.exports = {
   },
   validateUser: async (req, res) => {
     const { id } = req.params;
-    console.log(id);
     try {
       const user = await UserModel.findOne({ _id: id });
       console.log(user);

@@ -4,10 +4,8 @@ const categoryModel = require('../model/categoryModel');
 exports.getAllCategories = async (req, res) => {
   try {
     const category = await categoryModel.find();
-    console.log(category);
     res.json({ category, success: true });
   } catch (error) {
-    console.log(error);
     return res
       .status(404)
       .send({ message: error.message, success: false });
@@ -39,7 +37,6 @@ exports.editCategory = async (req, res) => {
       { _id: id },
       { $set: { name: req.body.name, description: req.body.description } },
     );
-    console.log(editedCategory);
     if (editedCategory) {
       return res.json({ success: true, message: 'Category updated successfully' });
     }
@@ -53,7 +50,6 @@ exports.deleteCategory = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedCategory = await categoryModel.deleteOne({ _id: id });
-    console.log(deletedCategory);
     if (deletedCategory) {
       return res.json({ success: true, message: 'Category deleted successfully' });
     }

@@ -8,7 +8,6 @@ const playlistsModel = require('../model/playlist');
 
 exports.addSong = async (req, res) => {
   try {
-    console.log(req.body);
     const category = await Category.findOne({ name: req.body.selectedCat });
     const newSong = song({
       name: req.body.datas.songName,
@@ -19,13 +18,10 @@ exports.addSong = async (req, res) => {
       language: req.body.language,
     });
     const savedSong = await newSong.save();
-    console.log(savedSong, 'saved');
     const Artist = await ArtistModel.findOneAndUpdate({ name: req.body.artistName }, {
       $push: { songs: savedSong._id },
     });
     await Artist.save();
-    console.log(Artist, 'art');
-
     return res.json({ success: true, message: 'song added successfully' });
   } catch (error) {
     return res.status(404).send({ message: error.message, success: false });
@@ -35,10 +31,8 @@ exports.addSong = async (req, res) => {
 exports.addSongAsArtist = async (req, res) => {
   const { id } = req.params;
   try {
-    console.log(req.body, 'body');
     const artist = await ArtistModel.findOne({ _id: id });
     const category = await Category.findOne({ name: req.body.selectedCat });
-    console.log(category, artist, 'thinkgs');
     if (artist.isVerified) {
       const newSong = song({
         name: req.body.datas.songName,
@@ -51,7 +45,6 @@ exports.addSongAsArtist = async (req, res) => {
         album: req.body.datas.albumName,
       });
       const savedSong = await newSong.save();
-      console.log(savedSong, 'saved');
       artist.songs.push(savedSong._id);
       await artist.save();
       return res.json({ message: 'Song Added Successfully', success: true });
@@ -81,9 +74,7 @@ exports.getAllSongsOfAnArtist = async (req, res) => {
   const { id } = req.params;
   try {
     const Artist = await ArtistModel.findById(id);
-    // const data = await song.find({ artist: Artist.name, IsHide: false });
     const data = await song.find({ $and: [{ artist: Artist.name }, { IsHide: false }] });
-    console.log(data);
     if (data) {
       return res.json({ success: true, songs: data });
     } else {
@@ -113,7 +104,6 @@ exports.getHiddenSongsOfArtist = async (req, res) => {
 exports.getAllHiddenSongs = async (req, res) => {
   try {
     const hidden = await song.find({ IsHide: true });
-    console.log(hidden);
     if (hidden) {
       return res.json({ success: true, data: hidden });
     }
@@ -137,10 +127,8 @@ exports.getCommonSongs = async (req, res) => {
 };
 
 exports.getAllFeeds = async (req, res) => {
-  // const { id } = req.params;
   // eslint-disable-next-line prefer-const
   let today = new Date().toISOString().slice(0, 10);
-  console.log(today);
   try {
     const songs = await song.find({ createdAt: today });
     console.log(songs);
@@ -155,14 +143,11 @@ exports.search = async (req, res) => {
     if (role === 'Tracks') {
       const tracks = await song.find({ name: { $regex: track, $options: 'i' } });
       res.json({ success: true, tracks });
-      console.log(tracks);
     } else if (role === 'Artist') {
       const artists = await ArtistModel.find({ name: { $regex: track, $options: 'i' } });
-      console.log(artists);
       res.json({ success: true, artists });
     } else {
       const playlists = await playlistsModel.find({ name: { $regex: track, $options: 'i' } });
-      console.log(playlists);
       res.json({ success: true, playlists });
     }
   } catch (error) {
@@ -203,7 +188,6 @@ exports.deleteSongAsAdmin = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedSong = await song.deleteOne({ _id: id });
-    console.log(deletedSong, 'dele5ted');
     if (deletedSong) {
       return res.json({ success: true, message: 'Song is Successfully deleted' });
     } else {
@@ -254,7 +238,6 @@ exports.deleteSongAsArtist = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedSong = await song.deleteOne({ _id: id });
-    console.log(deletedSong, 'dele5ted');
     if (deletedSong) {
       return res.json({ success: true, message: 'Song is Successfully deleted' });
     } else {

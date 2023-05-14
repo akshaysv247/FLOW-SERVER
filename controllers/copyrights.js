@@ -10,7 +10,6 @@ exports.getReports = async (req, res) => {
         model: 'UserSchema',
       },
     });
-    // console.log(reports[0].complaint);
     if (reports) {
       return res.json({ success: true, reports });
     }
@@ -34,8 +33,9 @@ exports.AddReport = async (req, res) => {
       const newRep = await Copyright.updateOne({ song: songId }, {
         $push: { complaint: complaints },
       });
-      console.log(newRep, 'rep');
-      return res.json({ success: true, message: 'reported successfully' });
+      if (newRep) {
+        return res.json({ success: true, message: 'reported successfully' });
+      }
     // eslint-disable-next-line no-else-return
     } else {
       const reporting = new Copyright({
@@ -47,13 +47,9 @@ exports.AddReport = async (req, res) => {
         }],
       });
       await reporting.save();
-      // console.log(reporting, 'reporting');
       return res.json({ message: 'reported successfully', success: true });
     }
   } catch (error) {
     console.error(error);
   }
 };
-// exports.deleteAReport = async (req, res) => {
-//   const { id } = req.params;
-// };
