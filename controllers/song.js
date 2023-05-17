@@ -155,35 +155,6 @@ exports.search = async (req, res) => {
   }
 };
 
-// exports.deleteSongAsAdmin = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const deletedSong = await song.deleteOne({ id });
-//     console.log(deletedSong);
-//     if (deletedSong) {
-//       return res.json({ success: true, message: 'Song is Successfully deleted' });
-//     } else {
-//       return res.json({ success: false, message: 'Cannot delete this song' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(404).send({ message: error.message });
-//   }
-// };
-
-// exports.hideSongAsAdmin = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const hidden = await song.findOneAndUpdate({ _id: id }, { $set: { hidden: true } });
-//     if (hidden) {
-//       return res.json({ success: true, message: 'Song is Successfully hidden' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(404).send({ message: error.message });
-//   }
-// };
-
 exports.deleteSongAsAdmin = async (req, res) => {
   const { id } = req.params;
   try {

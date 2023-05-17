@@ -61,13 +61,6 @@ exports.getSpecificPlaylist = async (req, res) => {
 exports.removeSongFromPlaylist = async (req, res) => {
   const { id, songId } = req.params;
   try {
-    // const playlist = await Playlist.findOne({ _id: id });
-    // const index = playlist.songs.indexOf(songId);
-    // if (playlist.songs.includes(songId)) {
-    //   playlist.songs.splice(index, 1);
-    //   await playlist.save();
-    //   return res.json({ success: true, message: 'song successfully removed' });
-    // }
     const playlist = await Playlist.findOneAndUpdate(
       { _id: id },
       { $pull: { songs: songId } },
