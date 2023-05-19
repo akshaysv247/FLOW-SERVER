@@ -70,6 +70,22 @@ exports.getAllSongs = async (req, res) => {
   }
 };
 
+exports.getAllSongsforArtist = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const Artist = await ArtistModel.findById(id);
+    const data = await song.find({ artist: Artist.name });
+    console.log(data);
+    if (data) {
+      return res.json({ success: true, songs: data });
+    } else {
+      return res.json({ success: false, message: 'Songs not found' });
+    }
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
+
 exports.getAllSongsOfAnArtist = async (req, res) => {
   const { id } = req.params;
   try {

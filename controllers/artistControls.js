@@ -114,8 +114,9 @@ exports.updateArtistProfile = async (req, res) => {
       $set: { ImgUrl: uri },
     });
     await artist.save();
-    if (artist) {
-      return res.json({ message: 'Updated profile successful', success: true, artist });
+    const newArtist = await ArtistModel.findOne({ _id: id });
+    if (newArtist) {
+      return res.json({ message: 'Updated profile successful', success: true, artist: newArtist });
     }
     return res.json({ success: false, message: 'There some issues with your profile updation' });
   } catch (err) {
@@ -126,12 +127,15 @@ exports.updateArtistProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   const { id } = req.params;
   try {
+    console.log(req.body);
     const user = await ArtistModel.updateOne({ _id: id }, {
       $set: { name: req.body.name, email: req.body.email, ImgUrl: req.body.uploadedUrl },
     });
-    await user.save();
-    if (user) {
-      return res.json({ message: 'Profile updated successfully', success: true, user });
+    console.log(user);
+    const newUser = await ArtistModel.findOne({ _id: id });
+    console.log(newUser);
+    if (newUser) {
+      return res.json({ message: 'Profile updated successfully', success: true, artist: newUser });
     }
     return res.json({ success: false, message: 'something went wrong while updating profile' });
   } catch (error) {

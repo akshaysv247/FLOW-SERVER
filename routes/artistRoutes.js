@@ -12,8 +12,9 @@ const {
   addNewPlaylist, getMyPlaylists, updateMyPlaylist, getSpecificPlaylist, deleteAPlaylist,
 } = require('../controllers/playlists');
 const {
-  addSongAsArtist, getAllSongsOfAnArtist, getCommonSongs,
-  getAllFeeds, getAllSongs, getHiddenSongsOfArtist, hideSongAsArtist, deleteSongAsArtist, search,
+  addSongAsArtist, getCommonSongs,
+  getAllFeeds, getAllSongs, getHiddenSongsOfArtist,
+  hideSongAsArtist, deleteSongAsArtist, search, getAllSongsforArtist,
 
 } = require('../controllers/song');
 const { getAllCategories } = require('../controllers/category');
@@ -23,7 +24,7 @@ router.post('/signup', artistSignup);
 router.post('/login', artistLogin);
 
 router.post('/add-track/:id', addSongAsArtist);
-router.get('/get-all-tracks/:id', authentication, getAllSongsOfAnArtist);
+router.get('/get-all-tracks/:id', authentication, getAllSongsforArtist);
 router.get('/get-hidden-songs-of-artist/:id', authentication, getHiddenSongsOfArtist);
 router.get('/get-followers/:id', authentication, getFollowers);
 router.get('/get-followers-for-chart/:id', authentication, artistChart);

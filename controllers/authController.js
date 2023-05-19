@@ -134,6 +134,7 @@ module.exports = {
   resetPassword: async (req, res) => {
     const { password } = req.body.datas;
     const { role, email } = req.body;
+    console.log(password, role, email);
     try {
       const salt = await bcrypt.genSaltSync(10);
       const hashedPassword = await bcrypt.hash(password.trim(), salt);
@@ -141,6 +142,7 @@ module.exports = {
         const user = await UserModel.findOneAndUpdate({ email: email }, {
           $set: { password: hashedPassword },
         });
+        console.log(user);
         if (user) {
           return res.json({ message: 'Your password has been updated', success: true });
         } else {
@@ -150,6 +152,7 @@ module.exports = {
         const artist = await artistModel.findOneAndUpdate({ email: email }, {
           $set: { password: hashedPassword },
         });
+        console.log(artist);
         if (artist) {
           return res.json({ message: 'Your password has been updated', success: true });
         } else {
@@ -172,6 +175,29 @@ module.exports = {
       }
     } catch (error) {
       return res.json({ success: false, message: 'Error occured' });
+    }
+  },
+  getPhone: async (req, res) => {
+    const { email } = req.params;
+    console.log(email);
+    try {
+      const user = await UserModel.findOne({ email: email });
+      // console.log(user);
+      if (!user) {
+        const artist = await artistModel.findOne({ email: email });
+        // console.log(artist);
+        if (artist) {
+          const phoneNo = parseInt(artist.phone, 10);
+          console.log(phoneNo);
+          return res.json({ success: true, phoneNo });
+        }
+        return res.json({ success: false, message: 'No user found invalid email' });
+      }
+      const phoneNo = parseInt(user.phone, 10);
+      console.log(phoneNo);
+      return res.json({ success: true, phoneNo });
+    } catch (error) {
+      return res.status(404).json({ success: false, message: error.message });
     }
   },
 };

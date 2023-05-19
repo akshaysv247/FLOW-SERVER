@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const authentication = require('../middlewares/jwtAuthentication');
 const {
-  userLogin, userSignup, resetPassword, validateUser,
+  userLogin, userSignup, resetPassword, validateUser, getPhone,
 } = require('../controllers/authController');
 const {
   getAllArtists, getSpecificArtist,
@@ -23,6 +23,7 @@ const { AddReport } = require('../controllers/copyrights');
 
 router.post('/login', userLogin);
 router.post('/signup', userSignup);
+router.get('/get-phone/:email', getPhone);
 router.post('/reset-password', resetPassword);
 router.get('/validate/:id', validateUser);
 

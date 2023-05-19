@@ -66,13 +66,14 @@ exports.getProfile = async (req, res) => {
 exports.uploadProfilePic = async (req, res) => {
   const { id } = req.params;
   const { uri } = req.body;
+  console.log(req.body);
   try {
-    const user = await UserModel.findOneAndUpdate({ _id: id }, {
-      $set: { ImgUrl: uri },
-    });
-    await user.save();
-    if (user) {
-      return res.json({ message: 'Updated profile successfully', success: true, user });
+    await UserModel.findByIdAndUpdate(id, { ImgUrl: uri });
+
+    const newUser = await UserModel.findOne({ _id: id });
+    console.log(newUser);
+    if (newUser) {
+      return res.json({ message: 'Updated profile successfully', success: true, artist: newUser });
     }
     return res.json({ success: false, message: 'There some issues with your profile updation' });
   } catch (error) {
@@ -82,13 +83,14 @@ exports.uploadProfilePic = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   const { id } = req.params;
+  console.log(req.body);
   try {
     const user = await UserModel.updateOne({ _id: id }, {
       $set: { name: req.body.name, email: req.body.email },
     });
-    await user.save();
     if (user) {
-      return res.json({ message: 'Profile updated successfully', success: true, user });
+      const newUser = await UserModel.findOne({ _id: id });
+      return res.json({ message: 'Profile updated successfully', success: true, artist: newUser });
     }
     return res.json({ success: false, message: 'something went wrong while updating profile' });
   } catch (error) {
