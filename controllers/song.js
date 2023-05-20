@@ -89,8 +89,9 @@ exports.getAllSongsforArtist = async (req, res) => {
 exports.getAllSongsOfAnArtist = async (req, res) => {
   const { id } = req.params;
   try {
-    const Artist = await ArtistModel.findById(id);
-    const data = await song.find({ $and: [{ artist: Artist.name }, { IsHide: false }] });
+    // const Artist = await ArtistModel.findById(id);
+    const data = await song.find({ $and: [{ artistId: id }, { IsHide: false }] });
+    console.log(data);
     if (data) {
       return res.json({ success: true, songs: data });
     } else {
