@@ -6,7 +6,7 @@ const authentication = require('../middlewares/jwtAuthentication');
 
 const {
   artistSignup, artistLogin, getArtistProfile, updateArtistProfile,
-  updateProfile, checkLiked, getLikedSongs, likeSongs,
+  updateProfile, checkLiked, getLikedSongs, likeSongs, getVerified,
 } = require('../controllers/artistControls');
 const {
   addNewPlaylist, getMyPlaylists, updateMyPlaylist, getSpecificPlaylist, deleteAPlaylist,
@@ -31,6 +31,7 @@ router.get('/get-followers-for-chart/:id', authentication, artistChart);
 router.get('/get-all-songs', authentication, getAllSongs);
 
 router.get('/get-profile/:id', authentication, getArtistProfile);
+router.put('/get-verified/:id', authentication, getVerified);
 router.post('/upload-picture/:id', authentication, updateArtistProfile);
 router.put('/update-profile/:id', authentication, updateProfile);
 

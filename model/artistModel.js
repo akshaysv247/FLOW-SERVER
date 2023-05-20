@@ -37,6 +37,10 @@ const ArtistSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isRequested: {
+    type: Boolean,
+    default: false,
+  },
 }, {
   timestamps: true,
 });

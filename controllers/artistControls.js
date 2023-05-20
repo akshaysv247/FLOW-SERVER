@@ -204,3 +204,15 @@ exports.getSpecificArtist = async (req, res) => {
     return res.status(404).send({ message: error.message });
   }
 };
+
+exports.getVerified = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const artist = await ArtistModel.updateOne({ _id: id }, { $set: { isRequested: true } });
+    if (artist) {
+      return res.json({ success: true, message: 'Your request recieved successfully' });
+    }
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
